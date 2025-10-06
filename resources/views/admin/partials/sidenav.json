@@ -1,0 +1,158 @@
+{
+    "dashboard": {
+        "keyword": [
+            "Dashboard",
+            "Home",
+            "Panel",
+            "Admin",
+            "Control center",
+            "Overview",
+            "Main hub",
+            "Management hub",
+            "Administrative hub",
+            "Central hub",
+            "Command center",
+            "Administrator portal",
+            "Centralized interface",
+            "Admin console",
+            "Management dashboard",
+            "Main screen",
+            "Administrative dashboard",
+            "Command dashboard",
+            "Main control panel"
+        ],
+        "title": "Dashboard",
+        "icon": "las la-home",
+        "route_name": "admin.dashboard",
+        "menu_active": "admin.dashboard",
+        "roles": ["admin","agent","payment_service","payment_department"]
+
+    },
+    "brands": {
+        "keyword": [
+            "Brand",
+            "Mark",
+            "Label",
+            "Trademark",
+            "Badge",
+            "Tag",
+            "Symbol",
+            "Moniker",
+            "Signature"
+        ],
+        "title": "Fournisseur",
+        "icon": "las la-person-booth",
+        "roles": ["admin","agent","payment_service","payment_department"],
+        "route_name": "admin.supplier.index",
+        "menu_active": "admin.supplier*"
+    },
+    "direction": {
+        "keyword": [
+            "Brand",
+            "Mark",
+            "Label",
+            "Trademark",
+            "Badge",
+            "Tag",
+            "Symbol",
+            "Moniker",
+            "Signature"
+        ],
+        "title": "Direction",
+        "icon": "las la-person-booth",
+        "roles": ["admin","agent","payment_service","payment_department"],
+        "route_name": "admin.direction.index",
+        "menu_active": "admin.direction*"
+    },
+    "compte": {
+        "keyword": [
+            "Brand",
+            "Mark",
+            "Label",
+            "Trademark",
+            "Badge",
+            "Tag",
+            "Symbol",
+            "Moniker",
+            "Signature"
+        ],
+        "title": "Compte Comptable",
+        "icon": "las la-person-booth",
+        "roles": ["admin","agent","payment_service","payment_department"],
+        "route_name": "admin.compte.index",
+        "menu_active": "admin.comptes*"
+    },
+    "manage_vehicles": {
+        "keyword": [
+            "active users",
+            "Vehicle",
+            "Add Vehicles",
+            "Edit Vehicles",
+            "Store Vehicles",
+            "Update Vehicles"
+        ],
+        "title": "Dossiers Paiements",
+        "icon": "las la-folder-open",
+        "route_name": "admin.dossiers.index",
+        "menu_active": "admin.dossiers*",
+        "roles": ["admin","agent","payment_service","payment_department","other_structure"]
+
+
+    },
+
+    "moderators": {
+        "keyword": [
+            "moderator"
+        ],
+        "title": "Employees",
+        "icon": "las la-user-shield",
+        "route_name": "admin.moderator.index",
+        "menu_active": "admin.moderator*",
+        "roles": ["admin","agent","payment_service","payment_department","other_structure"]
+    },
+
+    "system_setting": {
+        "keyword": [
+            "System Setting",
+            "setting",
+            "System configuration",
+            "System preferences",
+            "Configuration management",
+            "System setup"
+        ],
+        "title": "System Setting",
+        "icon": "las la-life-ring",
+        "route_name": "admin.setting.system",
+        "menu_active": [
+            "admin.setting.system",
+            "admin.setting.general",
+            "admin.setting.socialite.credentials",
+            "admin.setting.system.configuration",
+            "admin.setting.logo.icon",
+            "admin.extensions.index",
+            "admin.language.manage",
+            "admin.language.key",
+            "admin.seo",
+            "admin.frontend.templates",
+            "admin.frontend.manage.*",
+            "admin.maintenance.mode",
+            "admin.setting.cookie",
+            "admin.setting.custom.css",
+            "admin.setting.sitemap",
+            "admin.setting.robot",
+            "admin.setting.notification.global.email",
+            "admin.setting.notification.global.sms",
+            "admin.setting.notification.global.push",
+            "admin.setting.notification.email",
+            "admin.setting.notification.sms",
+            "admin.setting.notification.push",
+            "admin.setting.notification.templates",
+            "admin.setting.notification.template.edit",
+            "admin.frontend.index",
+            "admin.frontend.sections*",
+            "admin.gateway*",
+            "admin.setting.app.purchase"
+        ],
+        "roles": ["admin"]
+    }
+}

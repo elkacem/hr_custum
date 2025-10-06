@@ -1,0 +1,242 @@
+{
+    "banner": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Banner Section",
+        "element": {
+            "images":{
+                "image":{
+                    "size":"1000x586"
+                }
+            },
+            "heading": "text",
+            "subheading": "text",
+            "content": "textarea",
+            "button_1_name": "text",
+            "button_1_url": "text",
+            "button_2_name": "text",
+            "button_2_url": "text",
+            "modal": false
+        }
+    },
+
+    "booking": {
+        "builder": true,
+        "name": "Booking Section",
+        "content": {
+            "heading": "text"
+        }
+    },
+    "vehicle_rent": {
+        "builder": true,
+        "name": "Vehicle Rent",
+        "content": {
+            "heading": "text",
+            "subheading": "text",
+            "stylish_text": "text"
+        }
+    },
+    "choose_us": {
+        "builder": true,
+        "name": "Why Choose Us",
+        "content": {
+            "images":{
+                "image":{
+                    "size":"910x550"
+                }
+            },
+            "subheading": "text",
+            "heading": "text",
+            "stylish_text": "text"
+        },
+        "element": {
+            "icon": "icon",
+            "title": "text",
+            "details": "textarea",
+            "modal": true
+        }
+    },
+    "how_work": {
+        "builder": true,
+        "name": "How It Works",
+        "content": {
+            "stylish_text": "text"
+        },
+        "element": {
+            "images":{
+                "image":{
+                    "size":"907x626"
+                }
+            },
+            "title": "text",
+            "content": "textarea",
+            "modal": true
+        }
+    },
+
+    "plan": {
+        "builder": true,
+        "name": "Plans Section",
+        "content": {
+            "heading": "text",
+            "subheading": "text",
+            "stylish_text_left": "text",
+            "stylish_text_right": "text"
+        }
+    },
+    "testimonial": {
+        "builder": true,
+        "name": "Testimonial",
+        "content": {
+            "heading": "text",
+            "subheading": "text",
+            "stylish_text_left": "text",
+            "stylish_text_right": "text"
+        },
+        "element": {
+            "images":{
+                "image":{
+                    "size":"100x100"
+                }
+            },
+            "name": "text",
+            "designation": "text",
+            "rating": "text",
+            "quote": "textarea",
+            "modal": true
+        }
+    },
+    "about": {
+        "builder": true,
+        "name": "About Us",
+        "content": {
+            "images":{
+                "image":{
+                    "size":"837x554"
+                }
+            },
+            "heading": "text",
+            "content": "textarea",
+            "button_1_name": "text",
+            "button_1_url": "text",
+            "button_2_name": "text",
+            "button_2_url": "text",
+            "stylish_text": "text"
+        }
+    },
+    "policy_pages": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Policy Pages",
+        "hide_builder":true,
+        "element": {
+            "title": "text",
+            "slug":"title",
+            "details": "textarea-nic",
+            "modal": false,
+            "seo":true
+        }
+    },
+    "faq": {
+        "builder": true,
+        "name": "FAQ Section",
+        "content": {
+            "heading": "text",
+            "subheading": "text",
+            "stylish_text_left": "text",
+            "stylish_text_right": "text"
+        },
+        "element": {
+            "question": "text",
+            "answer": "textarea",
+            "modal": true
+        }
+    },
+    "blog": {
+        "builder": true,
+        "name": "Blog Section",
+        "content": {
+            "heading": "text",
+            "subheading": "text",
+            "stylish_text_left": "text",
+            "stylish_text_right": "text"
+        },
+        "element": {
+            "images":{
+                "image":{
+                    "size":"855x420",
+                    "thumb":"430x210"
+                }
+            },
+            "title": "text",
+            "slug":"title",
+            "description": "textarea-nic",
+            "seo":true,
+            "modal": false
+        }
+    },
+    "subscribe": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Subscribe Section",
+        "content": {
+            "content": "text"
+        }
+    },
+    "social_icon": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Social Icons",
+        "element": {
+            "title": "text",
+            "social_icon": "icon",
+            "url": "text",
+            "modal": true
+        }
+    },
+    "contact": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Contact Us",
+        "content": {
+            "email": "text",
+            "phone": "text",
+            "address": "text",
+            "map_latitude": "text",
+            "map_longitude": "text"
+        }
+    },
+    "footer": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Footer Section",
+        "content": {
+            "content": "text"
+        }
+    },
+    "rental_terms": {
+        "builder": true,
+        "no_selection":true,
+        "name": "Rental Terms & Conditions",
+        "element": {
+            "title": "text",
+            "slug":"title",
+            "details": "textarea-nic",
+            "modal": false,
+            "seo":true
+        }
+    },
+    "banned": {
+        "builder": true,
+        "no_selection": true,
+        "name": "Banned Page",
+        "content": {
+            "images": {
+                "image": {
+                    "size": "700x400"
+                }
+            },
+            "heading": "text"
+        }
+    }
+}

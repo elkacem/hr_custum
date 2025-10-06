@@ -1,0 +1,57 @@
+{
+    "general_setting": {
+        "keyword": ["general", "fundamental", "site information", "site", "website settings", "basic settings", "global settings","site color","timezone","site currency","pagination","currency format","site title","base color","secondary color","paginate"],
+        "title": "General Setting",
+        "subtitle": "Configure the fundamental information of the site.",
+        "icon": "las la-cog",
+        "route_name": "admin.setting.general"
+    },
+    "payment_gateways": {
+        "keyword": ["automatic", "manual", "configure payment gateways","aamarpay","amarpay","authorize","autorize.net","btcpay","btc pay","binance","blockchain","cashmaal","checkout","coinbase commerce","coingate","coinpayments","flutterwave","instamojo","mercado pago","mollie","nmi","now payments","nowpayments","payeer","paypal","paystack","paytm","perfect money","perfectmoney","razorpay","skrill","sslcommerz","stripe","twocheckout","two checkout","2checkout"],
+        "title": "Payment Gateways",
+        "subtitle": "Configure automatic or manual payment gateways to accept payment from users.",
+        "icon": "las la-credit-card",
+        "route_name": "admin.gateway.automatic.index"
+    },
+
+    "manage_frontend": {
+        "keyword": ["frontend","template","manage frontend", "frontend contents", "frontend settings", "about us","banner","contact","faq","social icons","section settings","subscribe","vehicle rent","why choose us","how work", "app configuration", "plan","faq","testimonial","about","blog","footer section","contact","rental policy & terms condition"],
+        "title": "Manage Frontend",
+        "subtitle": "Control all of the frontend contents of the system.",
+        "icon": "la la-html5",
+        "route_name": "admin.frontend.index"
+    },
+
+    "logo_favicon": {
+        "keyword": ["branding", "identity", "logo upload", "site branding", "brand identity","favicon","website icon","website favicon","website logo"],
+        "title": "Logo and Favicon",
+        "subtitle": "Upload your logo and favicon here.",
+        "icon": "las la-images",
+        "route_name": "admin.setting.logo.icon"
+    },
+
+    "language": {
+        "keyword": ["language", "localize", "translation", "translate", "internationalization", "language settings", "localization settings", "translation settings", "configure languages", "configure localization"],
+        "title": "Language",
+        "subtitle": "Configure your required languages and keywords to localize the system.",
+        "icon": "las la-language",
+        "route_name": "admin.language.manage"
+    },
+    "policy_pages": {
+        "keyword": ["privacy and policy", "terms and condition", "terms of service"],
+        "title": "Policy Pages",
+        "subtitle": "Configure your policy and terms of the system here.",
+        "icon": "las la-shield-alt",
+        "route_name": "admin.frontend.sections",
+        "params":{
+            "key":"policy_pages"
+        }
+    },
+    "maintenance_mode": {
+        "keyword": ["maintenance mode", "system maintenance", "system health", "maintenance settings", "system health settings", "enable maintenance", "disable maintenance", "maintenance configuration"],
+        "title": "Maintenance Mode",
+        "subtitle": "Enable or disable the maintenance mode of the system when required.",
+        "icon": "las la-robot",
+        "route_name": "admin.maintenance.mode"
+    }
+}
