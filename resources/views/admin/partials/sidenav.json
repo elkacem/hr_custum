@@ -28,6 +28,23 @@
         "roles": ["admin","agent","payment_service","payment_department"]
 
     },
+    "manage_vehicles": {
+        "keyword": [
+            "active users",
+            "Vehicle",
+            "Add Vehicles",
+            "Edit Vehicles",
+            "Store Vehicles",
+            "Update Vehicles"
+        ],
+        "title": "Dossiers Paiements",
+        "icon": "las la-folder-open",
+        "route_name": "admin.dossiers.index",
+        "menu_active": "admin.dossiers*",
+        "roles": ["admin","agent","payment_service","payment_department","other_structure"]
+
+
+    },
     "brands": {
         "keyword": [
             "Brand",
@@ -80,24 +97,7 @@
         "icon": "las la-person-booth",
         "roles": ["admin","agent","payment_service","payment_department"],
         "route_name": "admin.compte.index",
-        "menu_active": "admin.comptes*"
-    },
-    "manage_vehicles": {
-        "keyword": [
-            "active users",
-            "Vehicle",
-            "Add Vehicles",
-            "Edit Vehicles",
-            "Store Vehicles",
-            "Update Vehicles"
-        ],
-        "title": "Dossiers Paiements",
-        "icon": "las la-folder-open",
-        "route_name": "admin.dossiers.index",
-        "menu_active": "admin.dossiers*",
-        "roles": ["admin","agent","payment_service","payment_department","other_structure"]
-
-
+        "menu_active": "admin.compte*"
     },
 
     "moderators": {
@@ -108,7 +108,7 @@
         "icon": "las la-user-shield",
         "route_name": "admin.moderator.index",
         "menu_active": "admin.moderator*",
-        "roles": ["admin","agent","payment_service","payment_department","other_structure"]
+        "roles": ["admin","agent","payment_service","payment_department"]
     },
 
     "system_setting": {
@@ -140,15 +140,7 @@
             "admin.setting.custom.css",
             "admin.setting.sitemap",
             "admin.setting.robot",
-            "admin.setting.notification.global.email",
-            "admin.setting.notification.global.sms",
-            "admin.setting.notification.global.push",
-            "admin.setting.notification.email",
-            "admin.setting.notification.sms",
-            "admin.setting.notification.push",
-            "admin.setting.notification.templates",
-            "admin.setting.notification.template.edit",
-            "admin.frontend.index",
+            "admin.setting.nindex",
             "admin.frontend.sections*",
             "admin.gateway*",
             "admin.setting.app.purchase"

@@ -77,28 +77,51 @@
 
 @extends('admin.layouts.app')
 @section('panel')
+
+    @php
+        function sort_link($col, $label) {
+            $dir = request('dir','asc');
+            $next = (request('sort')===$col && $dir==='asc') ? 'desc' : 'asc';
+            $qs = array_merge(request()->query(), ['sort'=>$col, 'dir'=>$next]);
+            $icon = request('sort')===$col ? ($dir==='asc' ? 'la-sort-amount-up' : 'la-sort-amount-down') : 'la-sort';
+            return '<a href="'.e(request()->url().'?'.http_build_query($qs)).'">'.$label.' <i class="la '.$icon.'"></i></a>';
+        }
+    @endphp
+
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body p-0">
                     <div class="table-responsive--md  table-responsive">
                         <table class="table table--light style--two">
+{{--                            <thead>--}}
+{{--                            <tr>--}}
+{{--                                <th>@lang('ID')</th>--}}
+{{--                                <th>@lang('Date Engagement')</th>--}}
+{{--                                <th>@lang('Fournisseur')</th>--}}
+{{--                                <th>@lang('Montant TTC')</th>--}}
+{{--                                <th>@lang('Status')</th>--}}
+{{--                                <th>@lang('Actions')</th>--}}
+{{--                            </tr>--}}
+{{--                            </thead>--}}
                             <thead>
                             <tr>
-                                <th>@lang('ID')</th>
-                                <th>@lang('Date Engagement')</th>
-                                <th>@lang('Fournisseur')</th>
-                                <th>@lang('Montant TTC')</th>
-                                <th>@lang('Status')</th>
+                                <th>{!! sort_link('id', __('ID')) !!}</th>
+                                <th>{!! sort_link('engagement_date', __('Date Engagement')) !!}</th>
+                                <th>{!! sort_link('fournisseur', __('Fournisseur')) !!}</th>
+                                <th>{!! sort_link('montant_ttc', __('Montant TTC')) !!}</th>
+                                <th>{!! sort_link('status', __('Status')) !!}</th>
                                 <th>@lang('Actions')</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             @forelse ($dossiers as $dossier)
                                 <tr>
                                     <td>{{ $dossier->id }}</td>
                                     <td>{{ showDateTime($dossier->engagement_date, 'd/m/Y') }}</td>
-                                    <td>{{ $dossier->fournisseur }}</td>
+                                    <td>{{ optional($dossier->fournisseur)->name ?? '—' }}</td>
                                     <td>{{ showAmount($dossier->montant_ttc) }}</td>
                                     <td>{!! $dossier->statusBadge !!}</td>
 {{--                                    <td>--}}
@@ -162,10 +185,88 @@
     <x-confirmation-modal />
 @endsection
 
+{{--@push('breadcrumb-plugins')--}}
+{{--    <x-search-form placeholder="Fournisseur / Date" />--}}
+{{--    <a href="{{ route('admin.dossiers.create') }}" class="btn btn-outline--primary">--}}
+{{--        <i class="las la-plus"></i>@lang('Add New')--}}
+{{--    </a>--}}
+{{--@endpush--}}
+
 @push('breadcrumb-plugins')
-    <x-search-form placeholder="Fournisseur / Date" />
-    <a href="{{ route('admin.dossiers.create') }}" class="btn btn-outline--primary">
-        <i class="las la-plus"></i>@lang('Add New')
-    </a>
+    <form method="GET" class="d-flex flex-wrap gap-2 align-items-end">
+        {{-- Global search (matches many columns via DossierFilters::globalLike) --}}
+        <div>
+            <label class="form-label mb-0">@lang('Recherche')</label>
+            <input type="text" name="q" value="{{ request('q') }}" class="form-control"
+                   placeholder="@lang('ID, Fournisseur, Réf facture, …')">
+        </div>
+
+        {{-- Status --}}
+        <div>
+            <label class="form-label mb-0">@lang('Statut')</label>
+            <select name="status" class="form-control">
+                <option value="">@lang('Tous')</option>
+                @foreach(['PENDING'=>'En attente','APPROVED'=>'Approuvé','REJECTED'=>'Rejeté'] as $k=>$v)
+                    <option value="{{ $k }}" @selected(request('status')===$k)>{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Fournisseur --}}
+        <div>
+            <label class="form-label mb-0">@lang('Fournisseur')</label>
+            <select name="fournisseur_id" class="form-control select2">
+                <option value="">@lang('Tous')</option>
+                @foreach($fournisseurs ?? [] as $f)
+                    <option value="{{ $f->id }}" @selected(request('fournisseur_id')==$f->id)>{{ $f->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Date engagement from/to --}}
+        <div>
+            <label class="form-label mb-0">@lang('Engagement du')</label>
+            <input type="date" name="engagement_start" value="{{ request('engagement_start') }}" class="form-control">
+        </div>
+        <div>
+            <label class="form-label mb-0">@lang('au')</label>
+            <input type="date" name="engagement_end" value="{{ request('engagement_end') }}" class="form-control">
+        </div>
+
+        {{-- TTC min/max --}}
+        <div>
+            <label class="form-label mb-0">@lang('TTC min')</label>
+            <input type="number" step="0.01" name="montant_ttc_min" value="{{ request('montant_ttc_min') }}" class="form-control">
+        </div>
+        <div>
+            <label class="form-label mb-0">@lang('TTC max')</label>
+            <input type="number" step="0.01" name="montant_ttc_max" value="{{ request('montant_ttc_max') }}" class="form-control">
+        </div>
+
+        {{-- Has facture toggle --}}
+        <div>
+            <label class="form-label mb-0">@lang('Avec facture ?')</label>
+            <select name="has_facture" class="form-control">
+                <option value="">@lang('Tous')</option>
+                <option value="1" @selected(request('has_facture')==='1')>@lang('Oui')</option>
+                <option value="0" @selected(request('has_facture')==='0')>@lang('Non')</option>
+            </select>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button class="btn btn--primary"><i class="la la-filter"></i> @lang('Filtrer')</button>
+            <a href="{{ route('admin.dossiers.index') }}" class="btn btn--dark">@lang('Réinitialiser')</a>
+
+            {{-- Excel export (same filters) --}}
+{{--            <a href="{{ route('admin.dossiers.export', request()->query()) }}" class="btn btn--success">--}}
+{{--                <i class="la la-file-excel"></i> @lang('Exporter Excel')--}}
+{{--            </a>--}}
+
+            <a href="{{ route('admin.dossiers.create') }}" class="btn btn-outline--primary">
+                <i class="las la-plus"></i>@lang('Add New')
+            </a>
+        </div>
+    </form>
 @endpush
+
 

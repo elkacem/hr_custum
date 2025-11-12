@@ -10,6 +10,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin.supplier.update', $fournisseur) }}" method="POST">
                         @csrf @method('PUT')
+                        <x-form.input name="code" label="Code" value="{{ $fournisseur->code }}" required />
                         <x-form.input name="name" label="Nom" value="{{ $fournisseur->name }}" required />
                         <x-form.input name="email" label="Email" value="{{ $fournisseur->email }}" />
                         <x-form.input name="phone" label="Téléphone" value="{{ $fournisseur->phone }}" />

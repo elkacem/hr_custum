@@ -10,6 +10,7 @@
                             <thead>
                             <tr>
                                 <th>@lang('S.N.')</th>
+                                <th>@lang('Code')</th>
                                 <th>@lang('Nom')</th>
                                 <th>@lang('Email')</th>
                                 <th>@lang('Téléphone')</th>
@@ -21,6 +22,7 @@
                             @forelse ($fournisseurs as $fournisseur)
                                 <tr>
                                     <td>{{ $loop->index + $fournisseurs->firstItem() }}</td>
+                                    <td>{{ $fournisseur->code }}</td>
                                     <td>{{ $fournisseur->name }}</td>
                                     <td>{{ $fournisseur->email }}</td>
                                     <td>{{ $fournisseur->phone }}</td>
@@ -75,6 +77,10 @@
                     @csrf
                     <input type="hidden" name="id">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label>@lang('Code')</label>
+                            <input class="form-control" name="code" type="text" required>
+                        </div>
                         <div class="form-group">
                             <label>@lang('Nom')</label>
                             <input class="form-control" name="name" type="text" required>

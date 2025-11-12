@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Lib\CurlRequest;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
+use App\Models\Dossier;
+use App\Models\DossierRejection;
+use App\Models\Facture;
+use App\Models\Fournisseur;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\PlanLog;
@@ -16,6 +20,7 @@ use App\Rules\FileTypeValidate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Constants\Status;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -278,5 +283,150 @@ class AdminController extends Controller
         $pageTitle = 'Notifications';
         return view('admin.notifications', compact('pageTitle', 'notifications', 'hasUnread', 'hasNotification'));
     }
+
+
+    public function index()
+    {
+        $pageTitle = 'Dashboard';
+
+        // quick KPIs
+        $widget = [
+            'dossiers_total'    => Dossier::count(),
+            'dossiers_pending'  => Dossier::where('status', 'PENDING')->count(),
+            'dossiers_approved' => Dossier::where('status', 'APPROVED')->count(),
+            'dossiers_rejected' => Dossier::where('status', 'REJECTED')->count(),
+
+            'fournisseurs_total' => Fournisseur::count(),
+
+            // Factures = table factures (each linked to a dossier)
+            'factures_total'    => Facture::whereHas('dossier')->count(),
+
+            // Amounts (still from dossiers – keep if $montant_ttc lives on dossiers)
+            'ttc_sum' => (float) Dossier::sum('montant_ttc'),
+            'ttc_this_month' => (float) Dossier::whereBetween('engagement_date', [
+                now()->startOfMonth(), now()->endOfMonth()
+            ])->sum('montant_ttc'),
+        ];
+
+        // recent rejections (last 30 days)
+        $rejections_30d = DossierRejection::where('event', 'REJECT')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
+
+        return view('admin.dashboard', compact('pageTitle', 'widget', 'rejections_30d'));
+    }
+
+    /** line/area: dossiers events (created/approved/rejected) grouped by day or month */
+    public function dossierChart(Request $request)
+    {
+        [$start, $end, $fmt, $dates] = $this->dateBucket($request);
+
+        // created (by engagement_date)
+        $created = Dossier::whereBetween('engagement_date', [$start, $end])
+            ->selectRaw("DATE_FORMAT(engagement_date, '{$fmt}') as bucket, COUNT(*) c")
+            ->groupBy('bucket')->pluck('c', 'bucket');
+
+        // approved: updated_at with status=APPROVED
+        $approved = Dossier::where('status', 'APPROVED')
+            ->whereBetween('updated_at', [$start, $end])
+            ->selectRaw("DATE_FORMAT(updated_at, '{$fmt}') as bucket, COUNT(*) c")
+            ->groupBy('bucket')->pluck('c', 'bucket');
+
+        // rejected: from log table
+        $rejected = DossierRejection::where('event', 'REJECT')
+            ->whereBetween('created_at', [$start, $end])
+            ->selectRaw("DATE_FORMAT(created_at, '{$fmt}') as bucket, COUNT(*) c")
+            ->groupBy('bucket')->pluck('c', 'bucket');
+
+        $series = [
+            ['name' => 'Créés',     'data' => []],
+            ['name' => 'Approuvés', 'data' => []],
+            ['name' => 'Rejetés',   'data' => []],
+        ];
+
+        foreach ($dates as $d) {
+            $series[0]['data'][] = (int)($created[$d]  ?? 0);
+            $series[1]['data'][] = (int)($approved[$d] ?? 0);
+            $series[2]['data'][] = (int)($rejected[$d] ?? 0);
+        }
+
+        return response()->json(['created_on' => array_values($dates), 'data' => $series]);
+    }
+
+    /** column: total TTC (and optional HT) grouped by day/month */
+    public function amountChart(Request $request)
+    {
+        [$start, $end, $fmt, $dates] = $this->dateBucket($request);
+
+        $amounts = Dossier::whereBetween('engagement_date', [$start, $end])
+            ->selectRaw("DATE_FORMAT(engagement_date, '{$fmt}') as bucket")
+            ->selectRaw('SUM(montant_ht)  as ht')
+            ->selectRaw('SUM(montant_ttc) as ttc')
+            ->groupBy('bucket')
+            ->get()
+            ->keyBy('bucket');
+
+        $series = [
+            ['name' => 'Montant TTC', 'data' => []],
+            ['name' => 'Montant HT',  'data' => []],
+        ];
+
+        foreach ($dates as $d) {
+            $row = $amounts[$d] ?? null;
+            $series[0]['data'][] = (float)($row->ttc ?? 0);
+            $series[1]['data'][] = (float)($row->ht  ?? 0);
+        }
+
+        return response()->json(['created_on' => array_values($dates), 'data' => $series]);
+    }
+
+    /** pie/bar: top fournisseurs by TTC in range (default 30d) */
+    public function topFournisseursChart(Request $request)
+    {
+        $start = Carbon::parse($request->get('start_date', now()->subDays(30)->toDateString()))->startOfDay();
+        $end   = Carbon::parse($request->get('end_date', now()->toDateString()))->endOfDay();
+
+        $rows = Dossier::select('fournisseur_id', DB::raw('SUM(montant_ttc) as total_ttc'))
+            ->whereBetween('engagement_date', [$start, $end])
+            ->groupBy('fournisseur_id')
+            ->with('fournisseur:id,name')
+            ->orderByDesc('total_ttc')
+            ->limit(7)
+            ->get();
+
+        $labels = $rows->map(fn($r) => optional($r->fournisseur)->name ?? "ID #{$r->fournisseur_id}");
+        $data   = $rows->pluck('total_ttc')->map(fn($v) => (float)$v);
+
+        return response()->json(['labels' => $labels, 'data' => $data]);
+    }
+
+    /** helper: decide daily vs monthly buckets and produce a full label list */
+    private function dateBucket(Request $request): array
+    {
+        $start = Carbon::parse($request->get('start_date', now()->subDays(14)->toDateString()))->startOfDay();
+        $end   = Carbon::parse($request->get('end_date', now()->toDateString()))->endOfDay();
+
+        $diff = $start->diffInDays($end);
+        $fmt  = $diff > 30 ? '%m-%Y' : '%d-%m-%Y';
+
+        $dates  = [];
+        $cursor = (clone $start);
+
+        if ($diff > 30) {
+            while ($cursor <= $end) {
+                $dates[] = $cursor->format('m-Y');
+                $cursor->addMonthNoOverflow()->startOfMonth();
+            }
+        } else {
+            while ($cursor <= $end) {
+                $dates[] = $cursor->format('d-m-Y');
+                $cursor->addDay();
+            }
+        }
+
+        return [$start, $end, $fmt, $dates];
+    }
+
+
 
 }

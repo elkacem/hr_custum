@@ -10,6 +10,7 @@
                 <div class="card-body">
                     <form action="{{ route('admin.supplier.store') }}" method="POST">
                         @csrf
+                        <x-form.input name="code" label="Code" required />
                         <x-form.input name="name" label="Nom" required />
                         <x-form.input name="email" label="Email" />
                         <x-form.input name="phone" label="Téléphone" />

@@ -30,13 +30,27 @@ Route::namespace('Auth')->group(function () {
 
 Route::middleware('admin')->group(function () {
     Route::controller('AdminController')->group(function () {
-        Route::get('dashboard', 'dashboard')->name('dashboard');
-        Route::get('chart/deposit-withdraw', 'depositAndWithdrawReport')->name('chart.deposit.withdraw');
-        Route::get('chart/transaction', 'transactionReport')->name('chart.transaction');
+//        Route::get('dashboard', 'dashboard')->name('dashboard');
+//        Route::get('chart/deposit-withdraw', 'depositAndWithdrawReport')->name('chart.deposit.withdraw');
+//        Route::get('chart/transaction', 'transactionReport')->name('chart.transaction');
         Route::get('profile', 'profile')->name('profile');
         Route::post('profile', 'profileUpdate')->name('profile.update');
         Route::get('password', 'password')->name('password');
         Route::post('password', 'passwordUpdate')->name('password.update');
+
+        // routes/admin.php (or web.php inside admin group)
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/charts/dossiers',  [\App\Http\Controllers\Admin\AdminController::class, 'dossierChart'])
+            ->name('chart.dossiers');
+
+        Route::get('/charts/amounts',   [\App\Http\Controllers\Admin\AdminController::class, 'amountChart'])
+            ->name('chart.amounts');
+
+        Route::get('/charts/top-fournisseurs', [\App\Http\Controllers\Admin\AdminController::class, 'topFournisseursChart'])
+            ->name('chart.top_fournisseurs');
+
 
     });
 

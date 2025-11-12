@@ -1,175 +1,3 @@
-{{--@extends('admin.layouts.app')--}}
-
-{{--@section('panel')--}}
-{{--    <div class="row">--}}
-{{--        <div class="col-lg-12">--}}
-{{--            <div class="card">--}}
-{{--                <form action="{{ route('admin.dossiers.update', $dossier->id) }}" method="post" class="disableSubmission">--}}
-{{--                    @csrf--}}
-{{--                    <div class="card-body">--}}
-{{--                        <div class="row">--}}
-
-{{--                            --}}{{-- ================== ENGAGEMENT ================== --}}
-{{--                            <h5 class="mb-3">@lang('Engagement')</h5>--}}
-
-{{--                            <x-form.date name="engagement_date" label="Date Engagement" col="4"--}}
-{{--                                         value="{{ old('engagement_date', $dossier->engagement_date) }}" />--}}
-
-{{--                            --}}{{-- Fournisseur select --}}
-{{--                            <div class="col-md-4">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="fournisseur">@lang('Fournisseur')</label>--}}
-{{--                                    <div class="d-flex">--}}
-{{--                                        <select name="fournisseur" id="fournisseur" class="form-control select2" required>--}}
-{{--                                            <option value="">-- @lang('Sélectionner un fournisseur') --</option>--}}
-{{--                                            @foreach($fournisseurs as $fournisseur)--}}
-{{--                                                <option value="{{ $fournisseur->id }}"--}}
-{{--                                                    {{ old('fournisseur', $dossier->fournisseur) == $fournisseur->id ? 'selected' : '' }}>--}}
-{{--                                                    {{ $fournisseur->name }}--}}
-{{--                                                </option>--}}
-{{--                                            @endforeach--}}
-{{--                                        </select>--}}
-{{--                                        <button type="button" class="btn btn-sm btn-outline--primary ms-2"--}}
-{{--                                                data-bs-toggle="modal"--}}
-{{--                                                data-bs-target="#fournisseurModal">--}}
-{{--                                            <i class="las la-plus"></i>--}}
-{{--                                        </button>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
-{{--                            <x-form.input name="ref_facture" label="Réf Facture" col="4"--}}
-{{--                                          value="{{ old('ref_facture', $dossier->ref_facture) }}" />--}}
-{{--                            <x-form.date name="date_facture" label="Date Facture" col="4"--}}
-{{--                                         value="{{ old('date_facture', $dossier->date_facture) }}" />--}}
-{{--                            <x-form.input name="bon_commande" label="Bon de Commande" col="4"--}}
-{{--                                          value="{{ old('bon_commande', $dossier->bon_commande) }}" />--}}
-{{--                            <x-form.input name="periode" label="Périodicité" col="4"--}}
-{{--                                          value="{{ old('periode', $dossier->periode) }}" />--}}
-
-{{--                            --}}{{-- ================== DEMANDE PAIEMENT ================== --}}
-{{--                            <h5 class="mt-4 mb-3">@lang('Demande de Paiement')</h5>--}}
-
-{{--                            <x-form.date name="ordonnancement_date" label="Date Ordonnancement" col="4"--}}
-{{--                                         value="{{ old('ordonnancement_date', $dossier->ordonnancement_date) }}" />--}}
-{{--                            <x-form.input name="demande_number" label="N° Demande Paiement" col="4"--}}
-{{--                                          value="{{ old('demande_number', $dossier->demande_number) }}" />--}}
-
-{{--                            <x-form.checkbox name="dossier_rejete" label="Dossier Rejeté" col="2"--}}
-{{--                                             :checked="old('dossier_rejete', $dossier->dossier_rejete)" />--}}
-{{--                            <x-form.input name="be_number" label="N° BE" col="4"--}}
-{{--                                          value="{{ old('be_number', $dossier->be_number) }}" />--}}
-{{--                            <x-form.date name="date_envoi" label="Date Envoi" col="3"--}}
-{{--                                         value="{{ old('date_envoi', $dossier->date_envoi) }}" />--}}
-{{--                            <x-form.date name="date_retour" label="Date Retour" col="3"--}}
-{{--                                         value="{{ old('date_retour', $dossier->date_retour) }}" />--}}
-
-{{--                            <x-form.input name="direction_emettrice" label="Direction Émettrice" col="6"--}}
-{{--                                          value="{{ old('direction_emettrice', $dossier->direction_emettrice) }}" />--}}
-{{--                            <x-form.input name="condition_paiement" label="Condition de Paiement" col="6"--}}
-{{--                                          value="{{ old('condition_paiement', $dossier->condition_paiement) }}" />--}}
-{{--                            <x-form.input name="echeancier" label="Échéancier" col="6"--}}
-{{--                                          value="{{ old('echeancier', $dossier->echeancier) }}" />--}}
-
-{{--                            <x-form.input type="number" step="0.01" name="montant_ht" label="Montant HT" col="3"--}}
-{{--                                          value="{{ old('montant_ht', $dossier->montant_ht) }}" />--}}
-{{--                            <x-form.input type="number" step="0.01" name="taux_tva" label="TVA (%)" col="3"--}}
-{{--                                          value="{{ old('taux_tva', $dossier->taux_tva) }}" />--}}
-{{--                            <x-form.input type="number" step="0.01" name="montant_ttc" label="Montant TTC" col="3"--}}
-{{--                                          value="{{ old('montant_ttc', $dossier->montant_ttc) }}" />--}}
-
-
-{{--                            <h5 class="mt-4 mb-3">@lang('Fichiers du Dossier')</h5>--}}
-{{--                            <div class="col-md-12 mb-3">--}}
-{{--                                @if($dossier->attachments->count())--}}
-{{--                                    <ul class="list-group">--}}
-{{--                                        @foreach($dossier->attachments as $attachment)--}}
-{{--                                            <li class="list-group-item d-flex justify-content-between align-items-center">--}}
-{{--                                                <a href="{{ route('admin.dossiers.download', $attachment->id) }}" target="_blank">--}}
-{{--                                                    <i class="las la-paperclip"></i> {{ basename($attachment->file_path) }}--}}
-{{--                                                </a>--}}
-{{--                                                <form action="{{ route('admin.dossiers.delete-attachment', $attachment->id) }}" method="POST" class="d-inline">--}}
-{{--                                                    @csrf--}}
-{{--                                                    @method('DELETE')--}}
-{{--                                                    <button type="submit" class="btn btn-sm btn-outline--danger">--}}
-{{--                                                        <i class="las la-trash"></i>--}}
-{{--                                                    </button>--}}
-{{--                                                </form>--}}
-{{--                                            </li>--}}
-{{--                                        @endforeach--}}
-{{--                                    </ul>--}}
-{{--                                @else--}}
-{{--                                    <p class="text-muted">@lang('Aucun fichier attaché')</p>--}}
-{{--                                @endif--}}
-{{--                            </div>--}}
-
-{{--                            <div class="col-md-9">--}}
-{{--                                <button type="button" class="btn btn--dark btn--sm addAttachment my-3">--}}
-{{--                                    <i class="fas fa-plus"></i> @lang('Ajouter un fichier')--}}
-{{--                                </button>--}}
-{{--                                <p class="mb-2">--}}
-{{--                                    <span class="text--info">--}}
-{{--                                        @lang('Max 5 fichiers | Taille max : ' . convertToReadableSize(ini_get('upload_max_filesize')))--}}
-{{--                                        <br>@lang('Extensions autorisées : .jpg, .jpeg, .png, .pdf, .doc, .docx')--}}
-{{--                                    </span>--}}
-{{--                                </p>--}}
-{{--                                <div class="row fileUploadsContainer"></div>--}}
-{{--                            </div>000--}}
-
-{{--                            <x-form.textarea name="observation" label="Observation" col="12">--}}
-{{--                                {{ old('observation', $dossier->observation) }}--}}
-{{--                            </x-form.textarea>--}}
-
-{{--                            <div class="col-md-12 mt-3">--}}
-{{--                                <button type="submit" class="btn btn--primary w-100">@lang('Mettre à jour')</button>--}}
-{{--                            </div>--}}
-
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-
-{{--    --}}{{-- Modal Fournisseur (same as create) --}}
-{{--    <div class="modal fade" id="fournisseurModal" tabindex="-1" role="dialog">--}}
-{{--        <div class="modal-dialog" role="document">--}}
-{{--            <div class="modal-content">--}}
-{{--                <form action="{{ route('admin.supplier.store') }}" method="POST">--}}
-{{--                    @csrf--}}
-{{--                    <div class="modal-header">--}}
-{{--                        <h5 class="modal-title">@lang('Ajouter Fournisseur')</h5>--}}
-{{--                        <button type="button" class="close" data-bs-dismiss="modal">--}}
-{{--                            <i class="las la-times"></i>--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-body">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>@lang('Nom')</label>--}}
-{{--                            <input type="text" name="name" class="form-control" required>--}}
-{{--                        </div>--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>@lang('Email')</label>--}}
-{{--                            <input type="email" name="email" class="form-control">--}}
-{{--                        </div>--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>@lang('Téléphone')</label>--}}
-{{--                            <input type="text" name="phone" class="form-control">--}}
-{{--                        </div>--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>@lang('Adresse')</label>--}}
-{{--                            <input type="text" name="address" class="form-control">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-footer">--}}
-{{--                        <button type="submit" class="btn btn--primary">@lang('Enregistrer')</button>--}}
-{{--                    </div>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--@endsection--}}
-
 @extends('admin.layouts.app')
 
 @section('panel')
@@ -178,7 +6,6 @@
             <div class="card">
                 <form action="{{ route('admin.dossiers.update', $dossier->id) }}" method="post" class="disableSubmission" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
 
                     <div class="card-body">
                         <div class="row">
@@ -186,93 +13,287 @@
                             {{-- ================== ENGAGEMENT ================== --}}
                             <h5 class="mb-3">@lang('Engagement')</h5>
 
-                            {{-- Type de dossier --}}
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="type_dossier">@lang('Type de Dossier')</label>
+                            <div class="row g-3 align-items-end">
+                                {{-- Type de Dossier --}}
+                                <div class="col-lg-4">
+                                    <label class="form-label" for="type_dossier">@lang('Type de Dossier')</label>
                                     <select name="type_dossier" id="type_dossier" class="form-control" required>
                                         <option value="national" {{ old('type_dossier', $dossier->type_dossier) == 'national' ? 'selected' : '' }}>@lang('National')</option>
                                         <option value="international" {{ old('type_dossier', $dossier->type_dossier) == 'international' ? 'selected' : '' }}>@lang('International')</option>
                                     </select>
+                                    <div class="form-text">@lang('Choisissez “International” pour activer la conversion devise.')</div>
                                 </div>
+
+                                <x-form.date name="engagement_date" label="Date Engagement" col="4" :value="old('engagement_date', $dossier->engagement_date)" />
+                                <x-form.input name="demande_number" label="N° Demande Paiement" col="4" :value="old('demande_number', $dossier->demande_number)" />
                             </div>
 
-                            {{-- Date engagement --}}
-                            <x-form.date name="engagement_date" label="Date Engagement" col="4" :value="old('engagement_date', $dossier->engagement_date)" />
+                            <hr class="my-4">
 
-                            {{-- Numéro demande --}}
-                            <x-form.input name="demande_number" label="N° Demande Paiement" col="4" :value="old('demande_number', $dossier->demande_number)" />
+                            <div class="row g-4">
+                                <div class="col-lg-8">
+                                    {{-- Fournisseur / Direction / Condition --}}
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="fournisseur_id">@lang('Fournisseur')</label>
+                                            <div class="d-flex align-items-start gap-2">
+                                                <select name="fournisseur_id" id="fournisseur_id" class="form-control select2" required>
+                                                    <option value="">-- @lang('Sélectionner un fournisseur') --</option>
+                                                    @foreach($fournisseurs as $fournisseur)
+                                                        <option value="{{ $fournisseur->id }}" {{ old('fournisseur_id', $dossier->fournisseur_id) == $fournisseur->id ? 'selected' : '' }}>
+                                                            {{ $fournisseur->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="button" class="btn btn-outline--primary btn-sm cuModalBtn"
+                                                        data-modal_title="@lang('Ajouter Fournisseur')" data-bs-toggle="modal" data-bs-target="#fournisseurModal">
+                                                    <i class="las la-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
 
-                            {{-- Fournisseur --}}
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="fournisseur_id">@lang('Fournisseur')</label>
-                                    <select name="fournisseur_id" id="fournisseur_id" class="form-control select2" required>
-                                        <option value="">-- @lang('Sélectionner un fournisseur') --</option>
-                                        @foreach($fournisseurs as $fournisseur)
-                                            <option value="{{ $fournisseur->id }}"
-                                                {{ old('fournisseur_id', $dossier->fournisseur_id) == $fournisseur->id ? 'selected' : '' }}>
-                                                {{ $fournisseur->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="direction_id">@lang('Direction Émettrice')</label>
+                                            <select name="direction_id" id="direction_id" class="form-control select2" required>
+                                                <option value="">-- @lang('Sélectionner une direction') --</option>
+                                                @foreach($directions as $direction)
+                                                    <option value="{{ $direction->id }}" {{ old('direction_id', $dossier->direction_id) == $direction->id ? 'selected' : '' }}>
+                                                        {{ $direction->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="condition_paiement">@lang('Condition de Paiement')</label>
+                                            <select name="condition_paiement" id="condition_paiement" class="form-control select2" required>
+                                                <option value="">-- @lang('Sélectionner une condition') --</option>
+                                                @foreach($conditions as $condition)
+                                                    <option value="{{ $condition->name }}" {{ old('condition_paiement', $dossier->condition_paiement) == $condition->name ? 'selected' : '' }}>
+                                                        {{ $condition->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {{-- Montants DZD --}}
+                                    <div class="card mt-4 shadow-sm border-0" id="dzdCard">
+                                        <div class="card-header bg--light-blue">
+                                            <strong>@lang('Montants en Dinars (DZD)')</strong>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                {{-- HT --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="montant_ht">@lang('Montant HT')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="montant_ht" id="montant_ht" class="form-control"
+                                                               placeholder="0.00" value="{{ old('montant_ht', $dossier->montant_ht) }}">
+                                                        <span class="input-group-text">DZD</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Montant hors taxe en dinars.')</div>
+                                                </div>
+
+                                                {{-- TVA --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="taux_tva">@lang('TVA')</label>
+                                                    <select id="taux_tva" name="taux_tva" class="form-control">
+                                                        <option value="0"  {{ old('taux_tva', $dossier->taux_tva) == 0  ? 'selected' : '' }}>0%</option>
+                                                        <option value="9"  {{ old('taux_tva', $dossier->taux_tva) == 9  ? 'selected' : '' }}>9%</option>
+                                                        <option value="19" {{ old('taux_tva', $dossier->taux_tva) == 19 ? 'selected' : '' }}>19%</option>
+                                                        <option value="custom" {{ old('taux_tva', $dossier->taux_tva) == 'custom' ? 'selected' : '' }}>@lang('Autre')</option>
+                                                    </select>
+                                                    <div class="form-text">@lang('Choisissez un taux de TVA ou “Autre”.')</div>
+                                                </div>
+
+                                                {{-- TVA personnalisée --}}
+                                                <div class="col-md-4 {{ old('taux_tva', $dossier->taux_tva) == 'custom' ? '' : 'd-none' }}" id="customTvaContainer">
+                                                    <label class="form-label" for="custom_tva">@lang('TVA personnalisée (%)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="custom_tva" id="custom_tva" class="form-control"
+                                                               value="{{ old('custom_tva', $dossier->custom_tva) }}" placeholder="Ex: 12.50">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                </div>
+
+                                                {{-- ---- National only: Remise / Taxe / Timbre ---- --}}
+                                                <div class="col-12"></div>
+                                                <div class="col-md-4" id="nationalExtras">
+                                                    <label class="form-label" for="remise_percent">@lang('Remise (%)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="remise_percent" id="remise_percent"
+                                                               class="form-control"
+                                                               value="{{ old('remise_percent', $dossier->remise_percent ?? 0) }}" placeholder="0.00">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Réduction appliquée sur le HT.')</div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="taxe_percent">@lang('Taxe (%)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="taxe_percent" id="taxe_percent"
+                                                               class="form-control"
+                                                               value="{{ old('taxe_percent', $dossier->taxe_percent ?? 0) }}" placeholder="0.00">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Taxe appliquée sur le HT après remise.')</div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="timbre_percent">@lang('Droit de timbre (%)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="timbre_percent" id="timbre_percent"
+                                                               class="form-control"
+                                                               value="{{ old('timbre_percent', $dossier->timbre_percent ?? 0) }}" placeholder="0.00">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Timbre appliqué sur le HT après remise.')</div>
+                                                </div>
+
+
+                                                {{-- TTC --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="montant_ttc">@lang('Montant TTC')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" name="montant_ttc" id="montant_ttc" class="form-control"
+                                                               value="{{ old('montant_ttc', $dossier->montant_ttc) }}" readonly>
+                                                        <span class="input-group-text">DZD</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Calculé automatiquement : HT + TVA.')</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card mt-4 shadow-sm border-0 {{ old('type_dossier', $dossier->type_dossier) == 'international' ? '' : 'd-none' }}" id="internationalFields">
+                                        <div class="card-header bg--light-blue d-flex justify-content-between align-items-center">
+                                            <strong>@lang('Montants en Devise')</strong>
+                                            <span class="badge bg-secondary">@lang('Le Dinar est dérivé pour information')</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row g-3">
+
+                                                {{-- Devise initiale --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="montant_devise">@lang('Montant en Devise (initial)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" name="montant_devise" id="montant_devise"
+                                                               class="form-control" placeholder="0.00"
+                                                               value="{{ old('montant_devise', $dossier->montant_devise) }}">
+                                                        <button type="button" class="btn btn-outline-secondary" id="resetDeviseFromDzd"
+                                                                title="@lang('Réappliquer conversion depuis TTC DZD')">↻</button>
+                                                    </div>
+                                                    <div class="form-text">@lang('Source de vérité; le DZD est dérivé.')</div>
+                                                </div>
+
+                                                {{-- Taux (DZD / 1 unité) --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="taux_conversion">@lang('Taux de Conversion')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.0001" min="0" name="taux_conversion" id="taux_conversion"
+                                                               class="form-control" placeholder="Ex: 135.5000"
+                                                               value="{{ old('taux_conversion', $dossier->taux_conversion) }}">
+                                                        <span class="input-group-text">DZD/1</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Montant de 1 unité de la devise en DZD.')</div>
+                                                </div>
+
+                                                {{-- Devise --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="monnaie">@lang('Monnaie')</label>
+                                                    <select id="monnaie" name="monnaie" class="form-control">
+                                                        <option value="USD" {{ old('monnaie', $dossier->monnaie) == 'USD' ? 'selected' : '' }}>💵 USD</option>
+                                                        <option value="EUR" {{ old('monnaie', $dossier->monnaie) == 'EUR' ? 'selected' : '' }}>💶 EUR</option>
+                                                    </select>
+                                                </div>
+
+
+                                                {{-- IBS sur devise --}}
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="ibs_percent">@lang('IBS (%) sur Devise')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" id="ibs_percent" name="ibs_percent"
+                                                               class="form-control" value="{{ old('ibs_percent', $dossier->ibs_percent ?? 0) }}" placeholder="0.00">
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('Retenue appliquée sur le montant en devise.')</div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="ibs_devise">@lang('IBS (montant en devise)')</label>
+                                                    <input type="number" step="0.01" min="0" id="ibs_devise" class="form-control" readonly>
+                                                    <div class="form-text">@lang('Calcul : devise × IBS%.')</div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="montant_devise_net">@lang('Devise après IBS')</label>
+                                                    <input type="number" step="0.01" min="0" id="montant_devise_net" class="form-control" readonly>
+                                                    <div class="form-text">@lang('devise initiale - IBS en devise.')</div>
+                                                </div>
+
+                                                {{-- DZD dérivés (affichage uniquement) --}}
+                                                <div class="col-md-6">
+                                                    <label class="form-label">@lang('TTC (DZD) dérivé')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" id="ttc_dzd_initial" class="form-control" readonly>
+                                                        <span class="input-group-text">DZD</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('= devise initiale × taux.')</div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">@lang('HT (DZD) après IBS (dérivé)')</label>
+                                                    <div class="input-group">
+                                                        <input type="number" step="0.01" min="0" id="ht_dzd_apres_ibs" class="form-control" readonly>
+                                                        <span class="input-group-text">DZD</span>
+                                                    </div>
+                                                    <div class="form-text">@lang('= devise après IBS × taux.')</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
 
-                            {{-- Direction --}}
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="direction_id">@lang('Direction Émettrice')</label>
-                                    <select name="direction_id" id="direction_id" class="form-control select2">
-                                        <option value="">-- @lang('Sélectionner une direction') --</option>
-                                        @foreach($directions as $direction)
-                                            <option value="{{ $direction->id }}"
-                                                {{ old('direction_id', $dossier->direction_id) == $direction->id ? 'selected' : '' }}>
-                                                {{ $direction->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                                {{-- Résumé --}}
+                                <div class="col-lg-4 d-none d-lg-block">
+                                    <div class="card shadow-sm sticky-summary">
+                                        <div class="card-header bg--light-blue">
+                                            <strong>@lang('Résumé')</strong>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>@lang('HT (DZD)')</span>
+                                                <strong id="sum_ht_dzd">0.00</strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2 national-only">
+                                                <span>@lang('TVA')</span>
+                                                <strong><span id="sum_tva_rate">0</span>%</strong>
+                                            </div>
 
-                            {{-- Condition de paiement --}}
-                            <x-form.input name="condition_paiement" label="Condition de Paiement" col="6" :value="old('condition_paiement', $dossier->condition_paiement)" />
+                                            <hr class="my-2">
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>@lang('TTC (DZD)')</span>
+                                                <strong id="sum_ttc_dzd">0.00</strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>@lang('Taux')</span>
+                                                <strong><span id="sum_taux">0</span> <small>DZD/1</small></strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span>@lang('Montant en Devise')</span>
+                                                <strong id="sum_devise">0.00</strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-2 intl-only d-none">
+                                                <span>@lang('Devise après IBS')</span>
+                                                <strong id="sum_devise_net">0.00</strong>
+                                            </div>
 
-                            {{-- Montant HT --}}
-                            <x-form.input type="number" step="0.01" name="montant_ht" label="Montant HT" col="3" :value="old('montant_ht', $dossier->montant_ht)" />
-
-                            {{-- TVA --}}
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="taux_tva">@lang('TVA')</label>
-                                    <select id="taux_tva" name="taux_tva" class="form-control">
-                                        <option value="0" {{ old('taux_tva', $dossier->taux_tva) == 0 ? 'selected' : '' }}>0%</option>
-                                        <option value="9" {{ old('taux_tva', $dossier->taux_tva) == 9 ? 'selected' : '' }}>9%</option>
-                                        <option value="19" {{ old('taux_tva', $dossier->taux_tva) == 19 ? 'selected' : '' }}>19%</option>
-                                        <option value="custom" {{ old('taux_tva', $dossier->taux_tva) == 'custom' ? 'selected' : '' }}>@lang('Autre')</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {{-- Montant TTC --}}
-                            <x-form.input type="number" step="0.01" name="montant_ttc" label="Montant TTC" col="3" :value="old('montant_ttc', $dossier->montant_ttc)" readonly/>
-
-                            {{-- Champs International --}}
-                            <div id="internationalFields" class="row {{ old('type_dossier', $dossier->type_dossier) == 'international' ? '' : 'd-none' }} mt-3">
-                                <x-form.input type="number" step="0.01" name="montant_devise" label="Montant en Devise" col="3" :value="old('montant_devise', $dossier->montant_devise)" />
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="monnaie">@lang('Monnaie')</label>
-                                        <select id="monnaie" name="monnaie" class="form-control">
-                                            <option value="USD" {{ old('monnaie', $dossier->monnaie) == 'USD' ? 'selected' : '' }}>💵 Dollar ($)</option>
-                                            <option value="EUR" {{ old('monnaie', $dossier->monnaie) == 'EUR' ? 'selected' : '' }}>💶 Euro (€)</option>
-                                        </select>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <x-form.input type="number" step="0.0001" name="taux_conversion" label="Taux de Conversion" col="3" :value="old('taux_conversion', $dossier->taux_conversion)" />
-                                <x-form.input type="number" step="0.01" name="montant_ttc_local" id="montant_ttc_local" label="Montant TTC (Local)" col="3" :value="old('montant_ttc_local', $dossier->montant_ttc_local)" readonly />
                             </div>
 
                             {{-- Fichiers du dossier --}}
@@ -282,10 +303,10 @@
                                     <i class="fas fa-plus"></i> @lang('Ajouter un fichier')
                                 </button>
                                 <p class="mb-2">
-                                    <span class="text--info">
-                                        @lang('Max 5 fichiers | Taille max : ' . convertToReadableSize(ini_get('upload_max_filesize')))
-                                        <br>@lang('Extensions autorisées : .jpg, .jpeg, .png, .pdf, .doc, .docx')
-                                    </span>
+                <span class="text--info">
+                  @lang('Max 5 fichiers | Taille max : ' . convertToReadableSize(ini_get('upload_max_filesize')))
+                  <br>@lang('Extensions autorisées : .jpg, .jpeg, .png, .pdf, .doc, .docx')
+                </span>
                                 </p>
 
                                 {{-- déjà enregistrés --}}
@@ -306,28 +327,51 @@
                             {{-- Périodicité --}}
                             <x-form.input name="periode" label="Périodicité" col="4" :value="old('periode', $dossier->periode)" />
 
+{{--                            --}}{{-- Dossier rejeté --}}
+{{--                            <div class="col-md-2">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <label>@lang('Dossier Rejeté')</label><br>--}}
+{{--                                    <input type="checkbox" id="dossier_rejete" name="dossier_rejete" value="1"--}}
+{{--                                        {{ old('dossier_rejete', $dossier->dossier_rejete) ? 'checked' : '' }}>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+
+{{--                            --}}{{-- Conteneur des infos de rejet --}}
+{{--                            <div class="row {{ old('dossier_rejete', $dossier->dossier_rejete) ? '' : 'd-none' }}" id="rejetContainer">--}}
+{{--                                <div class="col-md-3">--}}
+{{--                                    <x-form.date name="date_envoi" label="Date Envoi" :value="old('date_envoi', $dossier->date_envoi)" />--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="rejection_reason">@lang('Raison du rejet')</label>--}}
+{{--                                        <textarea name="rejection_reason" id="rejection_reason" class="form-control" rows="2">{{ old('rejection_reason', $dossier->rejection_reason) }}</textarea>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             {{-- Dossier rejeté --}}
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>@lang('Dossier Rejeté')</label><br>
+                                    {{-- ensures we always get a value 0/1 --}}
+                                    <input type="hidden" name="dossier_rejete" value="0">
                                     <input type="checkbox" id="dossier_rejete" name="dossier_rejete" value="1"
-                                        {{ old('dossier_rejete', $dossier->dossier_rejete) ? 'checked' : '' }}>
+                                        {{ old('dossier_rejete', $dossier->status === 'REJECTED') ? 'checked' : '' }}>
                                 </div>
                             </div>
 
                             {{-- Conteneur des infos de rejet --}}
-                            <div class="row {{ old('dossier_rejete', $dossier->dossier_rejete) ? '' : 'd-none' }}" id="rejetContainer">
+                            <div class="row {{ old('dossier_rejete', $dossier->status === 'REJECTED') ? '' : 'd-none' }}" id="rejetContainer">
                                 <div class="col-md-3">
-                                    <x-form.date name="date_envoi" label="Date Envoi" :value="old('date_envoi', $dossier->date_envoi)" />
+                                    <x-form.date name="date_envoi" label="Date Envoi" :value="old('date_envoi')" />
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="rejection_reason">@lang('Raison du rejet')</label>
-                                        <textarea name="rejection_reason" id="rejection_reason"
-                                                  class="form-control" rows="2">{{ old('rejection_reason', $dossier->rejection_reason) }}</textarea>
+                                        <textarea name="rejection_reason" id="rejection_reason" class="form-control" rows="2">{{ old('rejection_reason') }}</textarea>
                                     </div>
                                 </div>
                             </div>
+
 
                             {{-- Bouton --}}
                             <div class="col-md-12 mt-3">
@@ -341,4 +385,203 @@
         </div>
     </div>
 @endsection
+
+<style>
+    .select2-container { flex: 1; min-width: 0; }
+    .select2-container .select2-selection { height: 38px !important; border-radius: 4px; }
+
+    .sticky-summary { position: sticky; top: 12px; }
+    .input-group > .input-group-text { min-width: 64px; justify-content: center; }
+
+    /* tighten vertical rhythm */
+    .row.g-4 > [class*="col-"] { margin-top: 0.25rem; }
+    .card { margin-bottom: 1rem; }
+    .card-header { padding: .65rem 1rem; }
+    .card-body { padding: .9rem 1rem; }
+    hr.my-4 { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+
+    .form-text { margin-top: .25rem; color: #6c757d; }
+
+    /* reject section subtle card look */
+    #rejetContainer {
+        border: 1px solid #e9ecef;
+        border-radius: .5rem;
+        padding: .75rem;
+        margin-top: .5rem;
+        background: #fcfcfd;
+    }
+    #rejetContainer .form-group label { font-weight: 600; }
+</style>
+
+@push('script')
+    <script>
+        /* ====== 1) Upload (UNCHANGED) ====== */
+        (function($){
+            "use strict";
+            var fileAdded = 0;
+            $('.addAttachment').on('click', function() {
+                if (fileAdded >= 5) return;
+                fileAdded++;
+                if (fileAdded >= 5) $(this).attr('disabled', true);
+
+                $(".fileUploadsContainer").append(`
+      <div class="col-lg-4 col-md-6 removeFileInput mt-3">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="file" name="attachments[]" class="form-control"
+                   accept=".jpeg,.jpg,.png,.pdf,.doc,.docx" required>
+            <button type="button" class="input-group-text removeFile bg--danger border--danger">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `);
+            });
+            $(document).on('click', '.removeFile', function() {
+                fileAdded--;
+                $('.addAttachment').removeAttr('disabled');
+                $(this).closest('.removeFileInput').remove();
+            });
+        })(jQuery);
+
+
+        /* ====== 2) Rejet toggle (UNCHANGED logic, tiny polish) ====== */
+        (function($){
+            "use strict";
+            function toggleRejetFields() {
+                const on = $('#dossier_rejete').is(':checked');
+                $('#rejetContainer').toggleClass('d-none', !on);
+                if(!on){
+                    $('#rejection_reason, #date_envoi, #date_retour').val('');
+                }
+            }
+            toggleRejetFields();
+            $('#dossier_rejete').on('change', toggleRejetFields);
+        })(jQuery);
+
+
+        (function($){
+            "use strict";
+
+            const num = v => { v = parseFloat(String(v).replace(',', '.')); return isFinite(v) ? v : 0; };
+
+            const getTvaRate = () => {
+                const val = $('#taux_tva').val();
+                return val === 'custom' ? num($('#custom_tva').val()) : num(val);
+            };
+
+            const showCustomTva = () => {
+                const isCustom = $('#taux_tva').val() === 'custom';
+                $('#customTvaContainer').toggleClass('d-none', !isCustom);
+                if (!isCustom) $('#custom_tva').val('');
+            };
+
+            function recalc(){
+                const type = $('#type_dossier').val();
+
+                /* ========= NATIONAL ========= */
+                if (type === 'national') {
+                    const ht     = num($('#montant_ht').val());
+                    const remise = num($('#remise_percent').val());
+                    const taxe   = num($('#taxe_percent').val());
+                    const timbre = num($('#timbre_percent').val());
+                    const tva    = getTvaRate();
+
+                    const htNet   = ht * (1 - (remise / 100));
+                    const tvaAmt  = htNet * (tva    / 100);
+                    const taxeAmt = htNet * (taxe   / 100);
+                    const timbAmt = htNet * (timbre / 100);
+                    const ttc     = htNet + tvaAmt + taxeAmt + timbAmt;
+
+                    $('#montant_ttc').val(ttc.toFixed(2));
+
+                    // résumé
+                    $('#sum_ht_dzd').text(ht.toFixed(2));
+                    $('#sum_ttc_dzd').text(ttc.toFixed(2));
+                    $('#sum_tva_rate').text(tva.toFixed(2).replace(/\.00$/, ''));
+                    $('#sum_taux').text(num($('#taux_conversion').val()).toFixed(2).replace(/^NaN$/, '0'));
+                    $('#sum_devise').text(num($('#montant_devise').val()).toFixed(2));
+                    $('#sum_devise_net').text('0.00');
+                }
+
+                /* ========= INTERNATIONAL (Devise = source of truth; IBS on devise) ========= */
+                else if (type === 'international') {
+                    const taux       = num($('#taux_conversion').val());        // DZD per unit devise
+                    const deviseInit = num($('#montant_devise').val());         // initial devise
+                    const ibsPct     = num($('#ibs_percent').val());            // IBS % on devise
+
+                    const ibsDevise  = deviseInit * ibsPct / 100;               // IBS amount in devise
+                    const deviseNet  = Math.max(0, deviseInit - ibsDevise);     // devise after IBS
+
+                    // derived DZD (display / store only)
+                    const ttcDzdInit = deviseInit * taux;                       // TTC (derived)
+                    const htDzdNet   = deviseNet * taux;                        // HT after IBS (derived)
+
+                    // fill helpers
+                    $('#ibs_devise').val(ibsDevise.toFixed(2));
+                    $('#montant_devise_net').val(deviseNet.toFixed(2));
+                    $('#ttc_dzd_initial').val(ttcDzdInit.toFixed(2));
+                    $('#ht_dzd_apres_ibs').val(htDzdNet.toFixed(2));
+
+                    // keep global fields in sync (if you persist DZD values)
+                    $('#montant_ttc').val(ttcDzdInit.toFixed(2));
+                    $('#montant_ht').val(htDzdNet.toFixed(2));
+
+                    // résumé
+                    $('#sum_ht_dzd').text(htDzdNet.toFixed(2));
+                    $('#sum_ttc_dzd').text(ttcDzdInit.toFixed(2));
+                    $('#sum_tva_rate').text('IBS');
+                    $('#sum_taux').text(taux > 0 ? taux.toFixed(4) : '0');
+                    $('#sum_devise').text(deviseInit.toFixed(2));
+                    $('#sum_devise_net').text(deviseNet.toFixed(2));
+                }
+            }
+
+            // Toggle UI by type
+            $('#type_dossier').on('change', function(){
+                const intl = $(this).val() === 'international';
+
+                // Show/hide entire DZD card
+                $('#dzdCard').toggleClass('d-none', intl);
+
+                // Show international card
+                $('#internationalFields').toggleClass('d-none', !intl);
+
+                // national-only items (TVA & extras)
+                $('#tvaSection').toggleClass('d-none', intl);
+                $('#customTvaContainer').toggleClass('d-none', intl || $('#taux_tva').val() !== 'custom');
+                $('#nationalExtras')      .toggleClass('d-none', intl);
+                $('.national-only')       .toggleClass('d-none', intl);
+                $('.intl-only')           .toggleClass('d-none', !intl);
+
+                recalc();
+            });
+
+            // Events
+            $('#taux_tva').on('change', function(){ showCustomTva(); recalc(); });
+            $(document).on('input change',
+                '#montant_ht, #custom_tva, #remise_percent, #taxe_percent, #timbre_percent,'+
+                ' #montant_devise, #taux_conversion, #ibs_percent',
+                recalc
+            );
+
+            // Reset: compute devise from current TTC and taux
+            $(document).on('click', '#resetDeviseFromDzd', function(){
+                const ttc  = num($('#montant_ttc').val());
+                const taux = num($('#taux_conversion').val());
+                if (taux > 0) {
+                    $('#montant_devise').val((ttc / taux).toFixed(2));
+                    recalc();
+                }
+            });
+
+            // Init
+            showCustomTva();
+            $('#type_dossier').trigger('change');
+            recalc();
+
+        })(jQuery);
+    </script>
+@endpush
 

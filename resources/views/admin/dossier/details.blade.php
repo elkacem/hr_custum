@@ -92,10 +92,10 @@
                             <span>@lang('Date Engagement')</span>
                             <span class="fw-bold">{{ showDateTime($dossier->engagement_date) }}</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>@lang('Fournisseur')</span>
-                            <span class="fw-bold">{{ $dossier->fournisseur }}</span>
-                        </li>
+{{--                        <li class="list-group-item d-flex justify-content-between">--}}
+{{--                            <span>@lang('Fournisseur')</span>--}}
+{{--                            <span class="fw-bold">{{ $dossier->fournisseur }}</span>--}}
+{{--                        </li>--}}
                         <li class="list-group-item d-flex justify-content-between">
                             <span>@lang('Montant TTC')</span>
                             <span class="fw-bold">{{ showAmount($dossier->montant_ttc) }}</span>
@@ -129,14 +129,21 @@
                             </li>
                         @endif
 
+{{--                        @if(strtoupper($dossier->status) === 'REJECTED' && in_array($user->role, ['admin','payment_service']))--}}
+{{--                            <form action="{{ route('admin.dossiers.resubmit', $dossier->id) }}" method="POST" class="d-inline">--}}
+{{--                                @csrf--}}
+{{--                                <button type="submit" class="btn btn-sm btn-outline--success">--}}
+{{--                                    <i class="las la-redo"></i> @lang('Resubmit for Review')--}}
+{{--                                </button>--}}
+{{--                            </form>--}}
+{{--                        @endif--}}
+
                         @if(strtoupper($dossier->status) === 'REJECTED' && in_array($user->role, ['admin','payment_service']))
-                            <form action="{{ route('admin.dossiers.resubmit', $dossier->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-outline--success">
-                                    <i class="las la-redo"></i> @lang('Resubmit for Review')
-                                </button>
-                            </form>
+                            <button class="btn btn-sm btn-outline--success" data-bs-toggle="modal" data-bs-target="#resubmitModal">
+                                <i class="las la-redo"></i> @lang('Resubmit for Review')
+                            </button>
                         @endif
+
 
 
 
@@ -190,6 +197,20 @@
                     @csrf
                     <div class="modal-body">
                         <p>@lang('Are you sure you want to reject this dossier?')</p>
+                        <div class="form-group mb-3">
+                            <label class="form-label">@lang('Out Date')</label>
+                            <input
+                                type="date"
+                                name="date_envoi"
+                                class="form-control @error('date_envoi') is-invalid @enderror"
+                                value="{{ old('date_envoi', now()->toDateString()) }}"
+                                required
+                            >
+                            @error('date_envoi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="text-muted">@lang('Date when the dossier leaves for corrections.')</small>
+                        </div>
                         <div class="form-group">
                             <label class="mt-2">@lang('Reason for Rejection')</label>
                             <textarea name="reason" maxlength="255" class="form-control" rows="5" required></textarea>
@@ -197,6 +218,37 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Resubmit Modal --}}
+    <div id="resubmitModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="resubmitModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('admin.dossiers.resubmit', $dossier->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resubmitModalLabel">@lang('Resubmit Dossier for Review')</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="las la-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label class="form-label">@lang('Return Date')</label>
+                            <input type="date" name="date_retour" class="form-control" value="{{ now()->toDateString() }}" required>
+                            <small class="text-muted">@lang('Date when the dossier is corrected and re-submitted.')</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">@lang('Resubmission Note') (@lang('optional'))</label>
+                            <textarea name="resubmit_note" class="form-control" rows="3" placeholder="@lang('What changed / fixed?')"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn--primary w-100 h-45">@lang('Resubmit')</button>
                     </div>
                 </form>
             </div>
@@ -271,26 +323,63 @@
     @if($dossier->rejections->count())
         <h5 class="mt-4">@lang('Historique des Rejets')</h5>
         <table class="table table--light style--two">
+{{--            <thead>--}}
+{{--            <tr>--}}
+{{--                <th>@lang('Step')</th>--}}
+{{--                <th>@lang('Rejected By')</th>--}}
+{{--                <th>@lang('Role')</th>--}}
+{{--                <th>@lang('Reason')</th>--}}
+{{--                <th>@lang('Date')</th>--}}
+{{--            </tr>--}}
+{{--            </thead>--}}
+{{--            <tbody>--}}
+{{--            @foreach($dossier->rejections as $rejection)--}}
+{{--                <tr>--}}
+{{--                    <td>{{ $rejection->step }}</td>--}}
+{{--                    <td>{{ $rejection->admin->name ?? 'N/A' }}</td>--}}
+{{--                    <td>{{ $rejection->role }}</td>--}}
+{{--                    <td>{{ $rejection->reason }}</td>--}}
+{{--                    <td>{{ showDateTime($rejection->created_at) }}</td>--}}
+{{--                </tr>--}}
+{{--            @endforeach--}}
+{{--            </tbody>--}}
             <thead>
             <tr>
-                <th>@lang('Step')</th>
-                <th>@lang('Rejected By')</th>
+                <th>@lang('Event')</th>
+{{--                <th>@lang('Step')</th>--}}
+                <th>@lang('By')</th>
                 <th>@lang('Role')</th>
                 <th>@lang('Reason')</th>
-                <th>@lang('Date')</th>
+                <th>@lang('Out Date')</th>
+                <th>@lang('Return Date')</th>
+                <th>@lang('Resubmitted By')</th>
+                <th>@lang('Resubmit Note')</th>
+{{--                <th>@lang('Logged At')</th>--}}
             </tr>
             </thead>
             <tbody>
-            @foreach($dossier->rejections as $rejection)
+            @foreach($dossier->rejections as $log)
                 <tr>
-                    <td>{{ $rejection->step }}</td>
-                    <td>{{ $rejection->admin->name ?? 'N/A' }}</td>
-                    <td>{{ $rejection->role }}</td>
-                    <td>{{ $rejection->reason }}</td>
-                    <td>{{ showDateTime($rejection->created_at) }}</td>
+                    <td>
+                        @if($log->event === 'REJECT')
+                            <span class="badge bg-danger">REJECT</span>
+                        @elseif($log->event === 'RESUBMIT')
+                            <span class="badge bg-success">RESUBMIT</span>
+                        @endif
+                    </td>
+{{--                    <td>{{ $log->step }}</td>--}}
+                    <td>{{ $log->admin->name ?? 'N/A' }}</td>
+                    <td>{{ $log->role }}</td>
+                    <td>{{ $log->reason ?? '-' }}</td>
+                    <td>{{ $log->date_envoi ? showDateTime($log->date_envoi) : '-' }}</td>
+                    <td>{{ $log->date_retour ? showDateTime($log->date_retour) : '-' }}</td>
+                    <td>{{ $log->resubmitter->name ?? '-' }}</td>
+                    <td>{{ $log->resubmit_note ?? '-' }}</td>
+{{--                    <td>{{ showDateTime($log->created_at) }}</td>--}}
                 </tr>
             @endforeach
             </tbody>
+
         </table>
     @endif
         </div>
