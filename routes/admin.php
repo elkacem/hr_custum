@@ -141,11 +141,12 @@ Route::middleware('admin')->group(function () {
         Route::post('{dossier}/reject', 'reject')->name('reject');
         Route::post('{dossier}/resubmit', 'resubmit')->name('resubmit');
 
-        Route::post('dossiers/attachments/{id}', 'deleteAttachment')
-            ->name('delete-attachment');
+        Route::delete('attachments/{id}', 'deleteAttachment')
+            ->name('attachments.delete');
 
-        Route::get('dossiers/attachments/{id}/download', 'downloadAttachment')
-            ->name('download');
+        Route::get('attachments/{id}/download', 'downloadAttachment')
+            ->name('attachments.download');
+
 
     });
 

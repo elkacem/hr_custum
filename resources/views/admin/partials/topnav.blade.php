@@ -35,7 +35,7 @@
             @endif --}}
             <li>
                 <button type="button" class="primary--layer" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@lang('Visit Website')">
-                    <a href="{{ route('home') }}" target="_blank"><i class="las la-globe"></i></a>
+                    <a href="http://aeroportalger.dz/" target="_blank"><i class="las la-globe"></i></a>
                 </button>
             </li>
             {{-- <li class="dropdown">

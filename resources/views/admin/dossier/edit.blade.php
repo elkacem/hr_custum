@@ -309,17 +309,28 @@
                 </span>
                                 </p>
 
-                                {{-- déjà enregistrés --}}
                                 @foreach($dossier->attachments as $file)
                                     <div class="mb-2">
-                                        <a href="{{ route('admin.dossiers.download', $file->id) }}" class="text-primary">
+                                        {{-- Download --}}
+                                        <a href="{{ route('admin.dossiers.attachments.download', $file->id) }}" class="text-primary">
                                             {{ basename($file->file_path) }}
                                         </a>
-                                        <a href="{{ route('admin.dossiers.delete-attachment', $file->id) }}" class="text-danger ms-2">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+
+                                        {{-- Delete with confirmation --}}
+                                        <form action="{{ route('admin.dossiers.attachments.delete', $file->id) }}"
+                                              method="POST"
+                                              class="d-inline">
+                                            @csrf
+{{--                                            @method('DELETE')--}}
+                                            <button type="submit"
+                                                    class="btn btn-link text-danger ms-2 p-0 confirmationBtn"
+                                                    data-question="@lang('Supprimer ce fichier ?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 @endforeach
+
 
                                 <div class="row fileUploadsContainer"></div>
                             </div>

@@ -112,6 +112,7 @@
                                 <th>{!! sort_link('fournisseur', __('Fournisseur')) !!}</th>
                                 <th>{!! sort_link('montant_ttc', __('Montant TTC')) !!}</th>
                                 <th>{!! sort_link('status', __('Status')) !!}</th>
+                                <th>@lang('Dossiers')</th>
                                 <th>@lang('Actions')</th>
                             </tr>
                             </thead>
@@ -143,6 +144,18 @@
 {{--                                            </button>--}}
 {{--                                        </div>--}}
 {{--                                    </td>--}}
+                                    {{-- NEW: column "Fichiers" --}}
+                                    <td>
+                                        @if($dossier->attachments_count > 0)
+                                            <a href="{{ route('admin.dossiers.details', $dossier->id) }}"
+                                               class="btn btn-sm btn-outline--info">
+                                                <i class="la la-paperclip"></i>
+                                                {{ $dossier->attachments_count }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="button--group">
                                             <a href="{{ route('admin.dossiers.details', $dossier->id) }}"

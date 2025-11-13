@@ -708,7 +708,7 @@ class DossierController extends Controller
 
         // Base query with relations you show in the table
         $q = Dossier::with(['fournisseur','direction'])
-            ->withCount('factures');
+            ->withCount(['factures', 'attachments']);
 
         // Apply all column filters + global search + sorting
         $q = DossierFilters::eloquent($q, $request);
@@ -1366,13 +1366,28 @@ class DossierController extends Controller
         return back()->with('success', 'Dossier ré-soumis pour approbation.');
     }
 
+//    public function details($id)
+//    {
+//        $dossier = Dossier::with(['rejections.admin', 'rejections.resubmitter', 'fournisseur'])->findOrFail($id);
+//        $pageTitle = "Détails du Dossier #{$dossier->id}";
+//
+//        return view('admin.dossier.details', compact('pageTitle', 'dossier'));
+//    }
+
     public function details($id)
     {
-        $dossier = Dossier::with(['rejections.admin', 'rejections.resubmitter', 'fournisseur'])->findOrFail($id);
+        $dossier = Dossier::with([
+            'rejections.admin',
+            'rejections.resubmitter',
+            'fournisseur',
+            'attachments',      // ⬅️ important pour les fichiers
+        ])->findOrFail($id);
+
         $pageTitle = "Détails du Dossier #{$dossier->id}";
 
         return view('admin.dossier.details', compact('pageTitle', 'dossier'));
     }
+
 
     public function destroy($id)
     {
